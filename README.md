@@ -14,8 +14,8 @@ It's made to support only Laravel and [Laravel Passport](https://laravel.com/doc
 * Requires PHP version `^8.2`.
 * [lcobucci/jwt](https://github.com/lcobucci/jwt) version `^4.0`.
 * [league/oauth2-server](https://github.com/thephpleague/oauth2-server) `^8.2`.
-* Laravel 10
-* Laravel Passport installed and configured
+* Laravel 8/9/10
+* Laravel Passport (v10/11) installed and configured
 
 ## Installation
 
@@ -23,10 +23,10 @@ It's made to support only Laravel and [Laravel Passport](https://laravel.com/doc
 composer require jeremy379/laravel-openid-connect
 ```
 
-Now when calling the `oauth/authorize` endpoint, provide the `openid` scope to get an `id_token`.  
+Now when calling the `oauth/authorize` endpoint, provide the `openid` scope to get an `id_token`.
 Provide more scopes (e.g. `openid profile email`) to receive additional claims in the `id_token`.
 
-The id_token will be returned after the call to the `oauth/token` endpoint. 
+The id_token will be returned after the call to the `oauth/token` endpoint.
 
 ## Configuration
 
@@ -92,16 +92,16 @@ class IdentityEntity implements IdentityEntityInterface
 
 Here is an example to verify the signature with lcobucci/jwt
 
-```php 
+```php
   $config = Configuration::forSymmetricSigner(
     new \Lcobucci\JWT\Signer\Rsa\Sha256(),
     InMemory::file(base_path('oauth-public.key')) //This is the public key generate by passport. You need to share it.
   );
-  
+
   //Parse the token
-  
+
   $token = $config->parser()->parse($idtoken);
-  
+
   $signatureValid = $config->validator()->validate($token, new \Lcobucci\JWT\Validation\Constraint\SignedWith($config->signer(), $config->signingKey()));
 ```
 
